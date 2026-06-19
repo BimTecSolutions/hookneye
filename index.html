@@ -1,67 +1,314 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>402 — Service Paused</title>
+<meta name="description" content="Free trial period has ended. Contact the admin to upgrade and restore access.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #11141b;
+    --ink-soft: #1a1f29;
+    --paper: #f6f1e6;
+    --paper-shadow: #e7dfcd;
+    --copper: #c9793f;
+    --copper-deep: #a85f2c;
+    --stamp-red: #a3392b;
+    --text-dim: #8c93a3;
+    --text-card: #4a4334;
+    --text-card-soft: #87806c;
+  }
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+  *{ box-sizing: border-box; }
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  html, body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background: var(--ink);
+  }
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
+  body{
+    font-family: 'Inter', sans-serif;
+    color: var(--text-dim);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding: 32px 20px;
+    background:
+      radial-gradient(ellipse 900px 600px at 50% -10%, #1c2230 0%, transparent 60%),
+      radial-gradient(ellipse 700px 500px at 85% 110%, #181d27 0%, transparent 55%),
+      var(--ink);
+    position:relative;
+    overflow-x:hidden;
+  }
 
+  /* faint grain */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 
- <base href="https://bimtecsolutions.github.io/hookneye/">
+  .wrap{
+    width:100%;
+    max-width: 480px;
+    position:relative;
+    z-index:1;
+  }
 
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.16em;
+    color: var(--copper);
+    text-align:center;
+    margin-bottom: 22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 10px;
+  }
+  .eyebrow .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--copper);
+    box-shadow: 0 0 8px 1px rgba(201,121,63,0.6);
+  }
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new project for the Hook and Eye Department in Omega Line LTD.">
+  /* ===== Ticket card ===== */
+  .ticket{
+    background: var(--paper);
+    border-radius: 14px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.5) inset,
+      0 30px 60px -20px rgba(0,0,0,0.55),
+      0 10px 25px -10px rgba(0,0,0,0.4);
+    position:relative;
+    overflow:hidden;
+    opacity:0;
+    transform: translateY(14px);
+    animation: rise 0.7s cubic-bezier(.2,.8,.2,1) 0.1s forwards;
+  }
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Hook & Eye">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  @keyframes rise{
+    to{ opacity:1; transform:translateY(0); }
+  }
 
-  <!-- Favicon -->
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
-  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  .ticket-top{
+    padding: 44px 38px 30px;
+    position:relative;
+  }
 
-  <title>Hook & Eye</title>
-  <link rel="manifest" href="manifest.json">
+  .stamp{
+    position:absolute;
+    top: 28px;
+    right: 26px;
+    width: 124px;
+    transform: rotate(-11deg);
+    opacity:0;
+    animation: stampDown 0.5s cubic-bezier(.34,1.56,.64,1) 0.65s forwards;
+    filter: url(#roughen);
+  }
+  @keyframes stampDown{
+    0%{ opacity:0; transform: rotate(-11deg) scale(1.7); }
+    60%{ opacity:1; }
+    100%{ opacity:1; transform: rotate(-11deg) scale(1); }
+  }
+  .stamp svg{ display:block; width:100%; height:auto; }
+
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    color: var(--text-card-soft);
+    text-transform: uppercase;
+    margin: 0 0 14px;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: 34px;
+    line-height:1.08;
+    color: var(--ink);
+    margin: 0 0 16px;
+    max-width: 240px;
+  }
+
+  p.copy{
+    font-size: 14.5px;
+    line-height:1.6;
+    color: var(--text-card);
+    margin: 0;
+    max-width: 320px;
+  }
+
+  p.copy strong{
+    color: var(--ink);
+    font-weight:600;
+  }
+
+  /* perforation divider */
+  .perf{
+    position:relative;
+    height: 0;
+    border-top: 2px dashed var(--paper-shadow);
+    margin: 4px 0;
+  }
+  .perf::before, .perf::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width: 26px;
+    height: 26px;
+    border-radius:50%;
+    background: var(--ink);
+  }
+  .perf::before{ left: -13px; }
+  .perf::after{ right: -13px; }
+
+  .ticket-bottom{
+    padding: 26px 38px 34px;
+    display:flex;
+    flex-direction:column;
+    gap: 18px;
+  }
+
+  .meta-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-card-soft);
+    letter-spacing:0.02em;
+  }
+  .meta-row b{
+    color: var(--text-card);
+    font-weight:500;
+  }
+
+  .cta{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    background: var(--copper);
+    color: #fff8f0;
+    text-decoration:none;
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size: 14.5px;
+    padding: 14px 22px;
+    border-radius: 9px;
+    box-shadow: 0 10px 22px -8px rgba(201,121,63,0.55), inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .cta:hover{
+    background: var(--copper-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 26px -8px rgba(201,121,63,0.65), inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .cta:active{ transform: translateY(0); }
+  .cta svg{ width:15px; height:15px; flex-shrink:0; }
+
+  .cta:focus-visible{
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  .subnote{
+    text-align:center;
+    font-size: 12px;
+    color: var(--text-card-soft);
+  }
+
+  .footer{
+    text-align:center;
+    margin-top: 26px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: #525a6b;
+  }
+
+  @media (max-width: 420px){
+    h1{ font-size: 28px; max-width: 180px; }
+    .stamp{ width: 100px; top:24px; right:20px; }
+    .ticket-top{ padding: 36px 26px 26px; }
+    .ticket-bottom{ padding: 22px 26px 28px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ticket, .stamp{ animation: none !important; opacity:1 !important; transform:none !important; }
+  }
+</style>
 </head>
 <body>
-  
-  <script src="flutter_bootstrap.js" async></script>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js"></script>
-  
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-  
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAhLaUhGxj2z_BWEurEYYbaXKAs-f7c2pM",
-      authDomain: "hook-eye-omega.firebaseapp.com",
-      projectId: "hook-eye-omega",
-      storageBucket: "hook-eye-omega.appspot.com",
-      messagingSenderId: "683881048106",
-      appId: "1:683881048106:web:c4ce6c4bd0e4f59f947b53"
-    };
-  
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-  </script>
+<!-- SVG filter used to roughen the stamp edge, kept hidden -->
+<svg width="0" height="0" style="position:absolute">
+  <filter id="roughen">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise" seed="7"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4"/>
+  </filter>
+</svg>
+
+<div class="wrap">
+
+  <div class="eyebrow"><span class="dot"></span>402 — PAYMENT REQUIRED<span class="dot"></span></div>
+
+  <div class="ticket">
+    <div class="ticket-top">
+
+      <div class="stamp" aria-hidden="true">
+        <svg viewBox="0 0 140 70" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="70" cy="35" r="33" fill="none" stroke="#a3392b" stroke-width="3" opacity="0.9"/>
+          <circle cx="70" cy="35" r="27" fill="none" stroke="#a3392b" stroke-width="1.4" opacity="0.7"/>
+          <text x="70" y="31" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" fill="#a3392b" letter-spacing="1">ACCESS</text>
+          <text x="70" y="44" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" fill="#a3392b" letter-spacing="1">PAUSED</text>
+        </svg>
+      </div>
+
+      <p class="kicker">Trial period</p>
+      <h1>Your free<br>period is over.</h1>
+      <p class="copy">
+        Thanks for trying the service. To keep this site running without interruption, <strong>contact the admin to activate the paid plan.</strong> Access resumes as soon as the upgrade is confirmed.
+      </p>
+    </div>
+
+    <div class="perf"></div>
+
+    <div class="ticket-bottom">
+      <div class="meta-row">
+        <span>STATUS: <b>EXPIRED</b></span>
+        <span>PLAN: <b>FREE TRIAL</b></span>
+      </div>
+
+      <a class="cta" href="mailto:admin@yourdomain.com?subject=Upgrade%20request%20%E2%80%94%20activate%20paid%20plan" id="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
+        Contact admin to upgrade
+      </a>
+
+      <p class="subnote">We'll re-enable your account right after payment is confirmed.</p>
+    </div>
+  </div>
+
+  <div class="footer">REF: TRIAL-EXPIRED · <span id="today"></span></div>
+
+</div>
+
+<script>
+  document.getElementById('today').textContent = new Date().toLocaleDateString('en-CA');
+</script>
 
 </body>
 </html>
